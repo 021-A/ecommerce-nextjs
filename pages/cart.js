@@ -1,94 +1,39 @@
-import Navbar from '../components/Navbar';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
 
 export default function Cart() {
-  const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('cart');
-    if (saved) setCartItems(JSON.parse(saved));
-  }, []);
-
-  const removeItem = (id) => {
-    const updated = cartItems.filter(item => item.id !== id);
-    setCartItems(updated);
-    localStorage.setItem('cart', JSON.stringify(updated));
-  };
-
-  const updateQty = (id, delta) => {
-    const updated = cartItems.map(item =>
-      item.id === id ? { ...item, qty: Math.max(1, item.qty + delta) } : item
-    );
-    setCartItems(updated);
-    localStorage.setItem('cart', JSON.stringify(updated));
-  };
-
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.qty, 0);
-
   return (
-    <div>
+    <div className="min-h-screen bg-slate-100 text-slate-900">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">🛍 Keranjang Belanja</h1>
 
-        {cartItems.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-gray-400 text-lg mb-4">Keranjang masih kosong</p>
-            <Link href="/">
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
-                Mulai Belanja
-              </button>
+      <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
+          <h1 className="text-3xl font-black text-slate-900">Keranjang</h1>
+          <p className="mt-2 text-slate-500">
+            Halaman keranjang sudah siap untuk dikembangkan lebih lanjut.
+          </p>
+
+          <div className="mt-8 rounded-2xl bg-slate-50 p-6 text-slate-600">
+            Saat ini belum ada state keranjang global, jadi halaman ini menjadi tampilan awal
+            yang bersih dan siap dihubungkan ke fitur add-to-cart.
+          </div>
+
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-6 py-4 font-semibold text-white transition hover:bg-blue-500"
+            >
+              Lanjut Belanja
+            </Link>
+            <Link
+              href="/checkout"
+              className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-4 font-semibold text-slate-700 transition hover:bg-slate-50"
+            >
+              Ke Checkout
             </Link>
           </div>
-        ) : (
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="md:col-span-2 space-y-4">
-              {cartItems.map(item => (
-                <div key={item.id} className="bg-white rounded-lg shadow p-4 flex gap-4 items-center">
-                  <img src={item.image} alt={item.name} className="w-20 h-20 object-cover rounded border" />
-                  <div className="flex-1">
-                    <p className="font-semibold text-gray-800">{item.name}</p>
-                    <p className="text-blue-600 font-bold">Rp {item.price.toLocaleString('id-ID')}</p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <button onClick={() => updateQty(item.id, -1)}
-                        className="w-7 h-7 bg-gray-200 rounded-full font-bold hover:bg-gray-300">−</button>
-                      <span className="font-semibold">{item.qty}</span>
-                      <button onClick={() => updateQty(item.id, 1)}
-                        className="w-7 h-7 bg-gray-200 rounded-full font-bold hover:bg-gray-300">+</button>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-bold text-gray-700">
-                      Rp {(item.price * item.qty).toLocaleString('id-ID')}
-                    </p>
-                    <button onClick={() => removeItem(item.id)}
-                      className="text-red-500 text-sm hover:underline mt-2">Hapus</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="bg-white rounded-lg shadow p-4 h-fit">
-              <h2 className="text-lg font-bold text-gray-800 mb-4">Ringkasan Belanja</h2>
-              <div className="flex justify-between text-gray-600 mb-2">
-                <span>Total ({cartItems.length} produk)</span>
-                <span>Rp {total.toLocaleString('id-ID')}</span>
-              </div>
-              <hr className="my-3" />
-              <div className="flex justify-between font-bold text-lg">
-                <span>Total Bayar</span>
-                <span className="text-blue-700">Rp {total.toLocaleString('id-ID')}</span>
-              </div>
-              <Link href="/checkout">
-                <button className="mt-4 w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700">
-                  Checkout Sekarang →
-                </button>
-              </Link>
-            </div>
-          </div>
-        )}
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
